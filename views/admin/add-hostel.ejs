@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyBook System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .navbar-brand { font-weight: bold; }
+        .card { box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .btn-custom { background: linear-gradient(45deg, #007bff, #0056b3); color: white; }
+        .sidebar { min-height: 100vh; background: #f8f9fa; }
+        .main-content { min-height: 100vh; }
+        .stats-card { border-left: 4px solid #007bff; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-building"></i> EasyBook
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <% if (typeof user !== 'undefined' && user) { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/dashboard">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/hostels">Hostels</a>
+                        </li>
+                    <% } %>
+                </ul>
+                <ul class="navbar-nav">
+                    <% if (typeof user !== 'undefined' && user) { %>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user"></i> Account
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/dashboard">Profile</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                            </ul>
+                        </li>
+                    <% } else { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/register">Register</a>
+                        </li>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+
+
+
+
+
+<div class="container-fluid">
+  <div class="row">
+    <!-- Admin Sidebar -->
+    <div class="col-md-3 col-lg-2 sidebar p-3">
+      <h5 class="text-primary mb-3">Admin Panel</h5>
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link" href="/admin/dashboard">
+            <i class="fas fa-tachometer-alt"></i> Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/admin/hostels">
+            <i class="fas fa-building"></i> Hostels
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin/students">
+            <i class="fas fa-users"></i> Students
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin/allocations">
+            <i class="fas fa-bed"></i> Allocations
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin/payments">
+            <i class="fas fa-credit-card"></i> Payments
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-md-9 col-lg-10 p-4">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-plus"></i> Add New Hostel</h2>
+        <a href="/admin/hostels" class="btn btn-secondary">
+          <i class="fas fa-arrow-left"></i> Back to Hostels
+        </a>
+      </div>
+
+      <!-- Error Messages -->
+      <% if (error) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <i class="fas fa-exclamation-triangle"></i> <%= error %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      <% } %>
+
+      <!-- Add Hostel Form -->
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="card">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0"><i class="fas fa-building"></i> Hostel Information</h5>
+            </div>
+            <div class="card-body">
+              <form action="/admin/hostels/add" method="POST">
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="name" class="form-label">Hostel Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="name" name="name" required 
+                           placeholder="e.g., Sunrise Boys Hostel">
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="type" class="form-label">Hostel Type <span class="text-danger">*</span></label>
+                    <select class="form-select" id="type" name="type" required>
+                      <option value="">Select Type</option>
+                      <option value="boys">Boys Hostel</option>
+                      <option value="girls">Girls Hostel</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="totalRooms" class="form-label">Total Rooms <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" id="totalRooms" name="totalRooms" 
+                           min="1" max="500" required placeholder="e.g., 50">
+                    <div class="form-text">Number of rooms in this hostel</div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="pricePerSemester" class="form-label">Price per Semester (₦) <span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" id="pricePerSemester" name="pricePerSemester" 
+                           min="1" step="0.01" required placeholder="e.g., 25000">
+                    <div class="form-text">Cost for one semester</div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="facilities" class="form-label">Facilities</label>
+                  <textarea class="form-control" id="facilities" name="facilities" rows="3"
+                            placeholder="Enter facilities separated by commas (e.g., WiFi, AC, Mess, Laundry, Common Room)"></textarea>
+                  <div class="form-text">List all available facilities separated by commas</div>
+                </div>
+
+                <div class="mb-4">
+                  <h6 class="text-muted">Preview:</h6>
+                  <div class="card bg-light">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <p><strong>Hostel Name:</strong> <span id="previewName">Not specified</span></p>
+                          <p><strong>Type:</strong> <span id="previewType">Not specified</span></p>
+                          <p><strong>Total Rooms:</strong> <span id="previewRooms">0</span></p>
+                        </div>
+                        <div class="col-md-6">
+                          <p><strong>Price per Semester:</strong> ₦<span id="previewPrice">0</span></p>
+                          <p><strong>Capacity:</strong> <span id="previewCapacity">0</span> students (2 per room)</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                  <a href="/admin/hostels" class="btn btn-outline-secondary me-md-2">
+                    <i class="fas fa-times"></i> Cancel
+                  </a>
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Add Hostel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.sidebar .nav-link.active {
+  background-color: #007bff;
+  color: white !important;
+  border-radius: 5px;
+}
+.sidebar .nav-link {
+  color: #495057;
+  padding: 10px 15px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  transition: all 0.3s;
+}
+.sidebar .nav-link:hover {
+  background-color: #e9ecef;
+  color: #007bff;
+}
+.form-label {
+  font-weight: 600;
+}
+.card-header {
+  border-bottom: 2px solid rgba(255,255,255,0.1);
+}
+</style>
+
+<script>
+// Live preview functionality
+document.getElementById('name').addEventListener('input', function() {
+  document.getElementById('previewName').textContent = this.value || 'Not specified';
+});
+
+document.getElementById('type').addEventListener('change', function() {
+  const typeText = this.value ? (this.value === 'boys' ? 'Boys Hostel' : 'Girls Hostel') : 'Not specified';
+  document.getElementById('previewType').textContent = typeText;
+});
+
+document.getElementById('totalRooms').addEventListener('input', function() {
+  const rooms = this.value || 0;
+  document.getElementById('previewRooms').textContent = rooms;
+  document.getElementById('previewCapacity').textContent = rooms * 2;
+});
+
+document.getElementById('pricePerSemester').addEventListener('input', function() {
+  const price = this.value || 0;
+  document.getElementById('previewPrice').textContent = parseFloat(price).toLocaleString();
+});
+</script>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2024 EasyBook System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+

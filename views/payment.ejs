@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - EasyBook System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .navbar-brand { font-weight: bold; }
+        .card { box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .btn-custom { background: linear-gradient(45deg, #007bff, #0056b3); color: white; }
+        .sidebar { min-height: 100vh; background: #f8f9fa; }
+        .main-content { min-height: 100vh; }
+        .stats-card { border-left: 4px solid #007bff; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-building"></i> EasyBook
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <% if (typeof user !== 'undefined' && user) { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/dashboard">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/hostels">Hostels</a>
+                        </li>
+                    <% } %>
+                </ul>
+                <ul class="navbar-nav">
+                    <% if (typeof user !== 'undefined' && user) { %>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user"></i> Account
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/dashboard">Profile</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                            </ul>
+                        </li>
+                    <% } else { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/register">Register</a>
+                        </li>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h4><i class="fas fa-credit-card"></i> Payment Details</h4>
+                </div>
+                <div class="card-body">
+                    <% if (allocation) { %>
+                        <!-- Booking Summary -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h6>Booking Summary</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p><strong>Student:</strong> <%= allocation.studentId.name %></p>
+                                        <p><strong>Student ID:</strong> <%= allocation.studentId.studentId %></p>
+                                        <p><strong>Hostel:</strong> <%= allocation.hostelId.name %></p>
+                                        <p><strong>Room:</strong> <%= allocation.roomId.roomNumber %></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong>Semester:</strong> <%= allocation.semester %></p>
+                                        <p><strong>Academic Year:</strong> <%= allocation.academicYear %></p>
+                                        <p><strong>Amount:</strong> <span class="text-success fw-bold fs-4">₦<%= allocation.paymentAmount.toLocaleString() %></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Payment Form -->
+                        <form action="/process-payment" method="POST">
+                            <input type="hidden" name="allocationId" value="<%= allocation._id %>">
+                            
+                            <div class="mb-3">
+                                <label for="paymentMethod" class="form-label">Payment Method</label>
+                                <select class="form-select" id="paymentMethod" name="paymentMethod" required>
+                                    <option value="">Select Payment Method</option>
+                                    <option value="card">Credit/Debit Card</option>
+                                    <option value="bank_transfer">Bank Transfer</option>
+                                </select>
+                            </div>
+                            
+                            <div id="cardDetails" style="display: none;">
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                        <label for="cardNumber" class="form-label">Card Number</label>
+                                        <input type="text" class="form-control" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="expiryDate" class="form-label">Expiry Date</label>
+                                        <input type="text" class="form-control" id="expiryDate" name="expiryDate" placeholder="MM/YY">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="cvv" class="form-label">CVV</label>
+                                        <input type="text" class="form-control" id="cvv" name="cvv" placeholder="123">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-success btn-lg">
+                                    <i class="fas fa-lock"></i> Pay ₦<%= allocation.paymentAmount.toLocaleString() %>
+                                </button>
+                                <a href="/dashboard" class="btn btn-outline-secondary">Cancel</a>
+                            </div>
+                        </form>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('paymentMethod').addEventListener('change', function() {
+    const cardDetails = document.getElementById('cardDetails');
+    if (this.value === 'card') {
+        cardDetails.style.display = 'block';
+        document.getElementById('cardNumber').required = true;
+        document.getElementById('expiryDate').required = true;
+        document.getElementById('cvv').required = true;
+    } else {
+        cardDetails.style.display = 'none';
+        document.getElementById('cardNumber').required = false;
+        document.getElementById('expiryDate').required = false;
+        document.getElementById('cvv').required = false;
+    }
+});
+</script>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2025 EasyBook System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+
+

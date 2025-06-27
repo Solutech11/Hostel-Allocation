@@ -1,0 +1,67 @@
+# EJS Pages Required for Hostel Management System
+
+## Public/Guest Pages
+- **`index.ejs`** - Homepage/landing page
+- **`register.ejs`** - Student registration form
+- **`login.ejs`** - Login form for students and admin
+- **`404.ejs`** - Error page for not found routes
+
+## Student Pages (Protected Routes)
+- **`dashboard.ejs`** - Student dashboard showing allocation status
+- **`hostels.ejs`** - Display available hostels based on gender
+- **`rooms.ejs`** - Show available rooms for selected hostel
+- **`payment.ejs`** - Payment form for room booking
+- **`payment-success.ejs`** - Payment confirmation page
+
+## Admin Pages (Admin Protected Routes)
+- **`admin/dashboard.ejs`** - Admin dashboard with statistics
+- **`admin/hostels.ejs`** - Manage hostels list
+- **`admin/add-hostel.ejs`** - Add new hostel form
+- **`admin/students.ejs`** - Manage students list
+- **`admin/allocations.ejs`** - View all room allocations
+- **`admin/payments.ejs`** - View all payment records
+
+## Directory Structure
+```
+views/
+├── index.ejs
+├── register.ejs
+├── login.ejs
+├── dashboard.ejs
+├── hostels.ejs
+├── rooms.ejs
+├── payment.ejs
+├── payment-success.ejs
+├── 404.ejs
+└── admin/
+    ├── dashboard.ejs
+    ├── hostels.ejs
+    ├── add-hostel.ejs
+    ├── students.ejs
+    ├── allocations.ejs
+    └── payments.ejs
+```
+
+## Key Data Requirements for Each Page
+
+### Student Pages
+- **index.ejs**: `user` (session info)
+- **register.ejs**: `error` (validation messages)
+- **login.ejs**: `error`, `message` (status messages)
+- **dashboard.ejs**: `user`, `allocation` (with populated hostel/room data)
+- **hostels.ejs**: `hostels` (filtered by gender), `user`
+- **rooms.ejs**: `hostel`, `rooms` (available rooms)
+- **payment.ejs**: `allocation` (with populated data)
+- **payment-success.ejs**: `transactionId`
+
+### Admin Pages
+- **admin/dashboard.ejs**: `stats` (total students, hostels, allocations, revenue)
+- **admin/hostels.ejs**: `hostels` (all hostels)
+- **admin/add-hostel.ejs**: `error` (validation messages)
+- **admin/students.ejs**: `students` (all non-admin users)
+- **admin/allocations.ejs**: `allocations` (with populated student/hostel/room data)
+- **admin/payments.ejs**: `payments` (with populated allocation data)
+
+## Total Pages: 15
+- 9 main pages
+- 6 admin pages
