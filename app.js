@@ -8,7 +8,7 @@ const path = require('path');
 const app = express();
 
 // Database connection
-mongoose.connect('mongodb://localhost:27017/hostel_system', {
+mongoose.connect('mongodb+srv://soluwizy:test123@cluster0.x4sbgl2.mongodb.net/hostel_system?retryWrites=true&w=majority&appName=Cluster0', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -25,7 +25,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({
-    mongoUrl: 'mongodb://localhost:27017/hostel_system'
+    mongoUrl: 'mongodb+srv://soluwizy:test123@cluster0.x4sbgl2.mongodb.net/hostel_system?retryWrites=true&w=majority&appName=Cluster0'
   }),
   cookie: { maxAge: 24 * 60 * 60 * 1000 } // 24 hours
 }));
